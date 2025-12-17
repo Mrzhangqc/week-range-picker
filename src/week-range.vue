@@ -242,21 +242,6 @@
           this.minDate = isDate(newVal[0]) ? new Date(newVal[0]) : null;
           this.maxDate = isDate(newVal[1]) ? new Date(newVal[1]) : null;
 
-          if(this.minDate && this.maxDate) {
-            if(this.minDate.getTime() > this.maxDate.getTime()) {
-              const maxDate = this.minDate;
-
-              this.minDate = this.maxDate;
-              this.maxDate = maxDate;
-            }
-
-            const prevWeekDay = Math.abs(7 - this.firstDayOfWeek + this.minDate.getDay()) % 7;
-            this.minDate = new Date(this.minDate.getTime() - prevWeekDay * 60 * 60 * 24 * 1000);
-          
-            const nextWeekDay = Math.abs(this.firstDayOfWeek - 1 - this.maxDate.getDay()) % 7;
-            this.maxDate = new Date(this.maxDate.getTime() + nextWeekDay * 60 * 60 * 24 * 1000);
-          }
-
           this.handleMinMaxDateWeek();
 
           if (this.minDate) {
@@ -303,7 +288,10 @@
           const prevWeekDay = Math.abs(7 - this.firstDayOfWeek + this.minDate.getDay()) % 7;
           this.minDate = new Date(this.minDate.getTime() - prevWeekDay * 60 * 60 * 24 * 1000);
         
-          const nextWeekDay = Math.abs(this.firstDayOfWeek - 1 - this.maxDate.getDay()) % 7;
+          // 计算周末的 getDay() 值：周末是 firstDayOfWeek + 6 天后的那一天
+          const weekendDay = (this.firstDayOfWeek + 6) % 7;
+          // 从当前日期到周末需要加的天数
+          const nextWeekDay = (7 + weekendDay - this.maxDate.getDay()) % 7;
           this.maxDate = new Date(this.maxDate.getTime() + nextWeekDay * 60 * 60 * 24 * 1000);
         }
       },
