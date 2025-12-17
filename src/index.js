@@ -1,4 +1,4 @@
-import WeekRangePicker from './picker/week-picker.js'
+import WeekRange from './picker/week-picker.js'
 import pkg from '../package.json';
 import locale from 'element-ui/src/locale';
 
@@ -6,18 +6,18 @@ function install(Vue, opts = {}) {
   locale.use(opts.locale);
   locale.i18n(opts.i18n);
 
-  Vue.component(WeekRangePicker.name, WeekRangePicker);
+  Vue.component(WeekRange.name, WeekRange);
 }
 
-WeekRangePicker.install = install
-const version = WeekRangePicker.version = pkg.version
+WeekRange.install = install
+const version = WeekRange.version = pkg.version
 
 /* istanbul ignore if */
 if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
 
-export const DateWeekRange = WeekRangePicker;
+export const WeekRangePicker = WeekRange;
 
 export {
   install,
@@ -25,4 +25,4 @@ export {
   locale
 }
 
-export default WeekRangePicker;
+export default WeekRange;

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <DateWeekRange
+    <WeekRangePicker
       size="small"
       v-model="weekRange"
       :clearable="true"
@@ -8,14 +8,14 @@
       :picker-options="pickerOptions"
       format="yyyy-MM-dd"
       value-format="yyyy-MM-dd"
-    ></DateWeekRange>
+    ></WeekRangePicker>
   </div>
 </template>
 
 <script>
 
 // 开发模式从源码导入，生产模式从构建产物导入
-import { DateWeekRange } from '../../src/index.js'
+import { WeekRangePicker } from '../../src/index.js'
 
 export default {
   data() {
@@ -31,7 +31,7 @@ export default {
     }
   },
   components: {
-    DateWeekRange
+    WeekRangePicker
   },
   watch: {
     weekRange(val) {

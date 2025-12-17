@@ -1,4 +1,4 @@
-import Picker from '../picker.vue';
+import Picker from './picker.vue';
 import WeekRangePanel from '../panel/week-range.vue';
 
 const getPanel = function() {
@@ -8,7 +8,7 @@ const getPanel = function() {
 export default {
   mixins: [Picker],
 
-  name: 'DateWeekRange',
+  name: 'WeekRangePicker',
 
   props: {
     timeArrowControl: Boolean

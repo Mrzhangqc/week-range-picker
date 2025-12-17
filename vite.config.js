@@ -29,7 +29,7 @@ export default defineConfig({
   build: isLib ? {
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
-      name: 'DateWeekRange',
+      name: 'WeekRangePicker',
       fileName: (format) => {
         if (format === 'es') {
           return `${pkg.name}.esm.js`
@@ -49,14 +49,14 @@ export default defineConfig({
     },
     outDir: 'dist',
     sourcemap: true,
-    minify: 'esbuild' // 使用 esbuild 压缩，比 terser 更快
+    minify: 'esbuild'
   } : {
-    outDir: resolve(__dirname, 'dist-example'),
+    outDir: resolve(__dirname, 'example/dist'),
     emptyOutDir: true
   },
   server: {
     port: 8090,
-    open: true,
+    open: '/index.html',
     host: true
   }
 })

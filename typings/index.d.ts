@@ -122,7 +122,7 @@ declare class ElDatePicker extends ElementUIComponent {
 
 export default class DatePicker extends ElDatePicker {}
 
-export const DateWeekRange = ElDatePicker
+export const WeekRangePicker = ElDatePicker
 
 export const locale: any;
 
