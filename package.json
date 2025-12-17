@@ -1,6 +1,6 @@
 {
   "name": "week-range-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is a week range selector.",
   "main": "dist/week-range-picker.min.js",
   "module": "dist/week-range-picker.esm.js",
