@@ -1,5 +1,5 @@
-import Picker from './picker';
-import WeekRangePanel from './week-range.vue';
+import Picker from '../picker.vue';
+import WeekRangePanel from '../panel/week-range.vue';
 
 const getPanel = function() {
   return WeekRangePanel;

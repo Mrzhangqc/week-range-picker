@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <DateWeekRange
-      v-model="test"
+      size="small"
+      v-model="weekRange"
       :clearable="true"
       range-separator="-"
       :picker-options="pickerOptions"
@@ -19,8 +20,8 @@ import { DateWeekRange } from '../../src/index.js'
 export default {
   data() {
     return {
-      // test: ['2023-01-01', '2023-01-07']
-      test: ['2025-12-08', '2025-12-14'],
+      // weekRange: ['2023-01-01', '2023-01-07']
+      weekRange: ['2025-12-08', '2025-12-14'],
       pickerOptions: {
         firstDayOfWeek: 1,
         disabledDate: (date) => {
@@ -33,8 +34,8 @@ export default {
     DateWeekRange
   },
   watch: {
-    test() {
-      console.log(this.test)
+    weekRange(val) {
+      console.log(val)
     }
   }
 }

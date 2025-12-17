@@ -170,7 +170,6 @@ const TYPE_VALUE_RESOLVER_MAP = {
           date = /WW/.test(date)
             ? date.replace(/WW/, week < 10 ? '0' + week : week)
             : date.replace(/W/, week);
-          console.log(date, '--sdf--');
           
           return date;
         } else {
@@ -420,7 +419,7 @@ export default {
 
     displayValue() {
       const formattedValue = formatAsFormatAndType(this.parsedValue, this.format);
-      console.log(formattedValue, '--sdf--')
+
       if (Array.isArray(this.userInput)) {
         return [
           this.userInput[0] || (formattedValue && formattedValue[0]) || '',
@@ -542,7 +541,6 @@ export default {
     },
 
     handleMouseEnter() {
-      console.log('--ss-----ss')
       if (this.readonly || this.pickerDisabled) return;
       if (!this.valueIsEmpty && this.clearable) {
         this.showClose = true;
@@ -554,7 +552,6 @@ export default {
         const value = this.parseString(this.displayValue);
         if (value) {
           this.picker.value = value;
-          console.log(1)
           if (this.isValidValue(value)) {
             this.emitInput(value);
             this.userInput = null;
@@ -569,7 +566,6 @@ export default {
     },
 
     handleClickIcon(event) {
-      console.log(this.value)
       if (this.readonly || this.pickerDisabled) return;
       if (this.showClose) {
         this.valueOnOpen = this.value;

@@ -1,4 +1,4 @@
-import DateTable from 'element-ui/packages/date-picker/src/basic/date-table.vue';
+import DateTable from '../basic/date-table.vue';
 import { getFirstDayOfMonth, getDayCountOfMonth, getWeekNumber, prevDate, nextDate, isDate, clearTime as _clearTime } from 'element-ui/src/utils/date-util';
 import { arrayFind } from 'element-ui/src/utils/util';
 
