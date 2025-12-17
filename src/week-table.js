@@ -92,12 +92,39 @@ export default {
           cell.customClass = typeof cellClassName === 'function' && cellClassName(cellDate);
           this.$set(row, this.showWeekNumber ? j + 1 : j, cell);
         }
+        
+        // 如果该周存在禁用日期，将该周的所有日期单元格都标记为 disabled
+        if (this.checkWeekHasDisabledDate(row)) {
+          for (let j = 0; j < 7; j++) {
+            const cellIndex = this.showWeekNumber ? j + 1 : j;
+            const cell = row[cellIndex];
+            const cellType = cell.type;
+            const cellTypes = ['normal', 'today', 'prev-month', 'next-month'];
+            if (cell && !cell.disabled && cellTypes.includes(cellType)) {
+              cell.disabled = true;
+              this.$set(row, cellIndex, cell);
+            }
+          }
+        }
       }
 
       return rows;
     }
   },
   methods: {
+    // fix range: 周范围内存在某日期被禁用，则该周所有日期都禁用
+    checkWeekHasDisabledDate(row) {
+      let weekHasDisabledDate = false;
+      for (let j = 0; j < 7; j++) {
+        const cellIndex = this.showWeekNumber ? j + 1 : j;
+        const cell = row[cellIndex];
+        if (cell && cell.disabled) {
+          weekHasDisabledDate = true;
+          break;
+        }
+      }
+      return weekHasDisabledDate;
+    },
     getCellClasses(cell) {
       const defaultValue = this.defaultValue ? Array.isArray(this.defaultValue) ? this.defaultValue : [this.defaultValue] : [];
 
@@ -260,6 +287,15 @@ export default {
       const newDate = this.getDateOfCell(row, column);
 
       if (!this.rangeState.selecting) {
+        // 检查该周是否有任何日期被禁用，如果有则不允许选择整周
+        const weekRow = this.rows[row];
+        let hasDisabledDate = this.checkWeekHasDisabledDate(weekRow);
+        
+        // 如果该周存在禁用日期，则不允许选择整周
+        if (hasDisabledDate) {
+          return;
+        }
+        
         this.rangeState.startDate = newDate;
         this.rangeState.minDateList = [
           this.getDateOfCell(row, 0),

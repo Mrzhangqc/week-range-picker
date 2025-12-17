@@ -20,9 +20,12 @@ export default {
   data() {
     return {
       // test: ['2023-01-01', '2023-01-07']
-      test: ['2025-12-08', new Date()],
+      test: ['2025-12-08', '2025-12-14'],
       pickerOptions: {
-        firstDayOfWeek: 1
+        firstDayOfWeek: 1,
+        disabledDate: (date) => {
+          return date.getTime() < new Date('2025-12-04').getTime();
+        }
       }
     }
   },
