@@ -40,12 +40,23 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['vue'],
-      output: {
-        globals: {
-          vue: 'Vue'
+      output: [
+        {
+          // ES 格式：保留命名导出
+          format: 'es',
+          exports: 'named'
         },
-        exports: 'named'
-      }
+        {
+          // UMD 格式：使用命名导出，但通过 footer 让全局变量直接指向默认导出
+          format: 'umd',
+          name: 'WeekRangePicker',
+          globals: {
+            vue: 'Vue'
+          },
+          exports: 'named',
+          footer: 'if (typeof WeekRangePicker !== "undefined" && WeekRangePicker.default) { WeekRangePicker = WeekRangePicker.default; }'
+        }
+      ]
     },
     outDir: 'dist',
     sourcemap: true,
