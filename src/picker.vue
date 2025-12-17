@@ -134,39 +134,49 @@ const TYPE_VALUE_RESOLVER_MAP = {
         const month = value.getMonth();
         const trueDate = new Date(value);
         
-        // 计算该日期所在周的第一天（周一）和最后一天（周日）
-        // ISO 8601 标准：周从周一开始
-        const dayOfWeek = value.getDay(); // 0 = 周日, 1 = 周一, ..., 6 = 周六
-        const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 计算到周一的偏移
-        const mondayDate = new Date(value);
-        mondayDate.setDate(value.getDate() + mondayOffset);
+        // 检查格式是否包含周数占位符
+        const hasWeekPlaceholder = /W+/.test(format);
         
-        // 计算这一周有多少天在当前日期所在的年份
-        let daysInCurrentYear = 0;
-        for(let i = 0; i < 7; i++) {
-          const d = new Date(mondayDate);
-          d.setDate(mondayDate.getDate() + i);
-          if(d.getFullYear() === y) daysInCurrentYear++;
-        }
-        
-        const weekYear = daysInCurrentYear >= 4 ? y : (y - 1);
-        
-        if (week === 1 && month === 11) {
-          // 12月的第1周，属于下一年的第一周
-          trueDate.setHours(0, 0, 0, 0);
-          trueDate.setDate(trueDate.getDate() + 3 - (trueDate.getDay() + 6) % 7);
-        }
-        let date = formatDate(trueDate, format);
-        if (weekYear !== y) {
-          date = date.replace(new RegExp(y, 'ig'), weekYear);
-        }
+        // 只有当格式包含周数占位符时，才需要计算周年和调整日期
+        if (hasWeekPlaceholder) {
+          // 计算该日期所在周的第一天（周一）和最后一天（周日）
+          // ISO 8601 标准：周从周一开始
+          const dayOfWeek = value.getDay(); // 0 = 周日, 1 = 周一, ..., 6 = 周六
+          const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 计算到周一的偏移
+          const mondayDate = new Date(value);
+          mondayDate.setDate(value.getDate() + mondayOffset);
+          
+          // 计算这一周有多少天在当前日期所在的年份
+          let daysInCurrentYear = 0;
+          for(let i = 0; i < 7; i++) {
+            const d = new Date(mondayDate);
+            d.setDate(mondayDate.getDate() + i);
+            if(d.getFullYear() === y) daysInCurrentYear++;
+          }
+          
+          const weekYear = daysInCurrentYear >= 4 ? y : (y - 1);
+          
+          if (week === 1 && month === 11) {
+            // 12月的第1周，属于下一年的第一周
+            trueDate.setHours(0, 0, 0, 0);
+            trueDate.setDate(trueDate.getDate() + 3 - (trueDate.getDay() + 6) % 7);
+          }
+          
+          let date = formatDate(trueDate, format);
+          if (weekYear !== y) {
+            date = date.replace(new RegExp(y, 'ig'), weekYear);
+          }
 
-        date = /WW/.test(date)
-          ? date.replace(/WW/, week < 10 ? '0' + week : week)
-          : date.replace(/W/, week);
+          date = /WW/.test(date)
+            ? date.replace(/WW/, week < 10 ? '0' + week : week)
+            : date.replace(/W/, week);
           console.log(date, '--sdf--');
           
-        return date;
+          return date;
+        } else {
+          // 如果格式不包含周数占位符，直接格式化原始日期
+          return formatDate(trueDate, format);
+        }
       }
 
       if(!Array.isArray(value)){

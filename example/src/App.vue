@@ -7,7 +7,7 @@
       :picker-options="{
         firstDayOfWeek: 1
       }"
-      format="yyyy-MM-dd"
+      format="yyyy-WW"
       value-format="yyyy-MM-dd"
     ></DateWeekRange>
   </div>
@@ -20,6 +20,7 @@ import { DateWeekRange } from '../../src/index.js'
 export default {
   data() {
     return {
+      // test: ['2023-01-01', '2023-01-07']
       test: ['2025-12-29', '2026-01-05']
     }
   },
