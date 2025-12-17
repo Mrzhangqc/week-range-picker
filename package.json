@@ -1,0 +1,60 @@
+{
+  "name": "week-range-picker",
+  "version": "1.0.5",
+  "description": "This is a week range selector.",
+  "main": "dist/week-range-picker.min.js",
+  "module": "dist/week-range-picker.esm.js",
+  "typings": "typings/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "serve": "vite",
+    "build": "npm run build:lib",
+    "build:lib": "cross-env BUILD_MODE=lib vite build",
+    "preview": "vite preview"
+  },
+  "peerDependencies": {
+    "vue": ">= 2 < 3"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "element-ui": "^2.15.14",
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.0.3",
+    "cross-env": "^7.0.3",
+    "merge": "^1.2.1",
+    "moment": "^2.29.1",
+    "vite": "^5.0.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mrzhangqc/week-range-picker.git"
+  },
+  "author": "sifan",
+  "keywords": [
+    "date-picker",
+    "date-week",
+    "week-range-picker",
+    "week-range",
+    "element-ui",
+    "element-ui-components"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mrzhangqc/week-range-picker/issues"
+  },
+  "files": [
+    "dist",
+    "src",
+    "typings"
+  ],
+  "homepage": "https://github.com/Mrzhangqc/week-range-picker#readme",
+  "unpkg": "dist/week-range-picker.min.js",
+  "vetur": {
+    "tags": "dist/tags.json",
+    "attributes": "dist/attributes.json"
+  },
+  "web-types": "dist/web-types.json"
+}
