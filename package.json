@@ -1,7 +1,7 @@
 {
   "name": "week-range-picker",
   "private": false,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This is a week range selector.",
   "exports": {
     ".": {
@@ -22,7 +22,8 @@
     "serve": "vite",
     "build": "npm run build:lib",
     "build:lib": "cross-env BUILD_MODE=lib vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node example/test/main.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",

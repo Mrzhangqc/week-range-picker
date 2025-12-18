@@ -8,6 +8,7 @@
       :picker-options="pickerOptions"
       value-format="yyyy-MM-dd"
     ></WeekRangePicker>
+    <span>{{ weekRange }}</span>
   </div>
 </template>
 
@@ -19,7 +20,10 @@ import { WeekRangePicker } from '../../src/index.js'
 export default {
   data() {
     return {
-      // weekRange: ['2023-01-01', '2023-01-07'],
+      // weekRange: ['2021-01-03', '2021-01-16'],
+      // weekRange: ['2023-01-01', '2023-01-14'],
+      // weekRange: ['2022-07-04', '2022-08-06'],
+      // weekRange: ['2025-12-15',  new Date()],
       weekRange: ['2025-12-08', '2026-01-04'],
       pickerOptions: {
         firstDayOfWeek: 1,
