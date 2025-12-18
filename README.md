@@ -9,7 +9,7 @@ vue2 element-ui week range component
 
 
 ### 注意
-不会自动注入css，需手动引入，以避免出现样式覆盖情况
+不会自动注入css，独立使用需手动引入（xxx/theme-chalk/icon.css，xxx/theme-chalk/date-picker.css），如果是element-ui项目内可以直接使用
   
 #### 安装
 
@@ -52,28 +52,20 @@ export default {
 </head>
 <body>
   <div id="app">
-    <week-range-picker v-model="test"></week-range-picker>
+    <week-range-picker v-model="range"></week-range-picker>
   </div>
 
   <!-- 先引入 Vue 2 -->
   <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
   <!-- 再引入组件 -->
-  <script src="https://unpkg.com/week-range-picker@next"></script>
+  <script src="https://unpkg.com/week-range-picker@1.0.5/dist/week-range-picker.umd.js"></script>
   
   <script>
-    // 使用 Vue.use() 注册组件（window.WeekRangePicker 直接指向组件本身）
-    Vue.use(window.WeekRangePicker);
-    
-    // 或者直接调用 install 方法
-    // window.WeekRangePicker.install(Vue);
-    
-    // 如果 Vue 在组件加载时已存在，组件会自动注册
-    
     new Vue({
       el: '#app',
       data() {
         return {
-          test: []
+          range: []
         }
       }
     });
