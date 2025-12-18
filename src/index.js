@@ -10,6 +10,19 @@ function install(Vue, opts = {}) {
 }
 
 WeekRange.install = install
-WeekRange.version = pkg.version
+const version = WeekRange.version = pkg.version
 
-export default WeekRange;
+/* istanbul ignore if */
+if (typeof window !== 'undefined' && window.Vue) {
+  install(window.Vue);
+}
+
+export const WeekRangePicker = WeekRange;
+
+export {
+  install,
+  version,
+  locale
+}
+
+export default WeekRangePicker;

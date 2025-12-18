@@ -1,9 +1,21 @@
 {
   "name": "week-range-picker",
-  "version": "1.0.2",
+  "private": false,
+  "version": "1.0.3",
   "description": "This is a week range selector.",
-  "main": "dist/week-range-picker.min.js",
-  "module": "dist/week-range-picker.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/week-range-picker.es.js",
+      "require": "./dist/week-range-picker.cjs.js"
+    }
+  },
+  "main": "./dist/week-range-picker.umd.js",
+  "module": "./dist/week-range-picker.es.js",
+  "files": [
+    "dist",
+    "src",
+    "typings"
+  ],
   "typings": "typings/index.d.ts",
   "scripts": {
     "dev": "vite",
@@ -12,19 +24,16 @@
     "build:lib": "cross-env BUILD_MODE=lib vite build",
     "preview": "vite preview"
   },
-  "peerDependencies": {
-    "vue": ">= 2 < 3"
-  },
   "dependencies": {
     "core-js": "^3.6.5",
     "element-ui": "^2.15.14",
-    "vue": ">= 2 < 3"
+    "vue": "^2.6.14"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue2": "^2.0.3",
     "cross-env": "^7.0.3",
     "moment": "^2.29.1",
-    "vite": "^5.0.0",
+    "vite": "^4.5.14",
+    "vite-plugin-vue2": "^2.0.3",
     "vue-template-compiler": "^2.6.11"
   },
   "repository": {
@@ -44,13 +53,8 @@
   "bugs": {
     "url": "https://github.com/Mrzhangqc/week-range-picker/issues"
   },
-  "files": [
-    "dist",
-    "src",
-    "typings"
-  ],
   "homepage": "https://github.com/Mrzhangqc/week-range-picker#readme",
-  "unpkg": "dist/week-range-picker.min.js",
+  "unpkg": "dist/week-range-picker.umd.js",
   "vetur": {
     "tags": "dist/tags.json",
     "attributes": "dist/attributes.json"
