@@ -97,40 +97,13 @@ const TYPE_VALUE_RESOLVER_MAP = {
     }
   },
   weekrange: {
-    formatter(value, format) {
+    formatter(value, format, firstDayOfWeek = 7) {
       function getDate(value) {
-        // 是否闰年
-        function isLeapYear(year) {
-          return (year%4==0 && year%100!=0 || year%400==0);
-        }
-
-        // 判断天数
-        function getDays(date) {
-          const year = date.getFullYear(),
-                month = date.getMonth() + 1,
-                day = date.getDate();
-
-          let days = day;
-          
-          //天数没有规律,故放在一个数组中
-          const monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
-          for(let i= 0; i< month-1;i++) {  //传进来的月份,对应的下标是-1的
-            days += monthDays[i];
-          }
-
-          //如果是闰年,天数加一
-          if(isLeapYear(year) && month > 2) {
-            days++;
-          }
-          return days++;
-        }
-
         if(!value) {
           return;
         }
 
         const y = value.getFullYear();
-        const week = getWeekNumber(value);
         const month = value.getMonth();
         const trueDate = new Date(value);
         
@@ -138,44 +111,118 @@ const TYPE_VALUE_RESOLVER_MAP = {
         const hasWeekPlaceholder = /W+/.test(format);
         
         // 只有当格式包含周数占位符时，才需要计算周年和调整日期
-        if (hasWeekPlaceholder) {
-          // 计算该日期所在周的第一天（周一）和最后一天（周日）
-          // ISO 8601 标准：周从周一开始
-          const dayOfWeek = value.getDay(); // 0 = 周日, 1 = 周一, ..., 6 = 周六
-          const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 计算到周一的偏移
-          const mondayDate = new Date(value);
-          mondayDate.setDate(value.getDate() + mondayOffset);
-          
-          // 计算这一周有多少天在当前日期所在的年份
-          let daysInCurrentYear = 0;
-          for(let i = 0; i < 7; i++) {
-            const d = new Date(mondayDate);
-            d.setDate(mondayDate.getDate() + i);
-            if(d.getFullYear() === y) daysInCurrentYear++;
-          }
-          
-          const weekYear = daysInCurrentYear >= 4 ? y : (y - 1);
-          
-          if (week === 1 && month === 11) {
-            // 12月的第1周，属于下一年的第一周
-            trueDate.setHours(0, 0, 0, 0);
-            trueDate.setDate(trueDate.getDate() + 3 - (trueDate.getDay() + 6) % 7);
-          }
-          
-          let date = formatDate(trueDate, format);
-          if (weekYear !== y) {
-            date = date.replace(new RegExp(y, 'ig'), weekYear);
-          }
-
-          date = /WW/.test(date)
-            ? date.replace(/WW/, week < 10 ? '0' + week : week)
-            : date.replace(/W/, week);
-          
-          return date;
-        } else {
-          // 如果格式不包含周数占位符，直接格式化原始日期
+        if (!hasWeekPlaceholder) {
           return formatDate(trueDate, format);
         }
+
+        // 计算周的第一天
+        function getFirstDayOfWeekDate(date, firstDayOfWeek) {
+          const dayOfWeek = date.getDay(); // 0 = 周日, 1 = 周一, ..., 6 = 周六
+          const firstDayJS = firstDayOfWeek === 7 ? 0 : firstDayOfWeek;
+          
+          // 计算到周的第一天的偏移量
+          const offsetToFirstDay = dayOfWeek >= firstDayJS
+            ? firstDayJS - dayOfWeek
+            : firstDayJS - dayOfWeek - 7;
+          
+          const firstDayOfWeekDate = new Date(date);
+          firstDayOfWeekDate.setDate(date.getDate() + offsetToFirstDay);
+          return { firstDayOfWeekDate, firstDayJS };
+        }
+
+        // 计算周数
+        function calculateWeekNumber(firstDayOfWeekDate, firstDayOfWeek) {
+          if (firstDayOfWeek === 1) {
+            return getWeekNumber(firstDayOfWeekDate);
+          }
+          
+          // 对于非ISO标准（周从周一开始），需要转换到ISO标准计算
+          const middleDayOfWeek = new Date(firstDayOfWeekDate);
+          middleDayOfWeek.setDate(firstDayOfWeekDate.getDate() + 3);
+          
+          const middleDayOfWeekDay = middleDayOfWeek.getDay();
+          const isoFirstDay = 1; // ISO 8601 标准的周第一天是周一
+          const offsetToIsoFirstDay = middleDayOfWeekDay >= isoFirstDay
+            ? isoFirstDay - middleDayOfWeekDay
+            : isoFirstDay - middleDayOfWeekDay - 7;
+          
+          const isoFirstDayDate = new Date(middleDayOfWeek);
+          isoFirstDayDate.setDate(middleDayOfWeek.getDate() + offsetToIsoFirstDay);
+          return getWeekNumber(isoFirstDayDate);
+        }
+
+        // 计算周年
+        function calculateWeekYear(firstDayOfWeekDate, originalYear) {
+          // 计算这一周有多少天在各个年份
+          const yearCounts = {};
+          const years = [];
+          for(let i = 0; i < 7; i++) {
+            const d = new Date(firstDayOfWeekDate);
+            d.setDate(firstDayOfWeekDate.getDate() + i);
+            const year = d.getFullYear();
+            yearCounts[year] = (yearCounts[year] || 0) + 1;
+            if (years.indexOf(year) === -1) {
+              years.push(year);
+            }
+          }
+          
+          // 如果一周跨越了多个年份，优先显示为较大的年份（新年）
+          if (years.length > 1) {
+            return Math.max(...years);
+          }
+          
+          // 根据ISO 8601标准：如果一周有4天或更多天在新年，这一周属于新年
+          const nextYear = originalYear + 1;
+          const prevYear = originalYear - 1;
+          if (yearCounts[nextYear] && yearCounts[nextYear] >= 4) {
+            return nextYear;
+          }
+          if (yearCounts[prevYear] && yearCounts[prevYear] >= 4) {
+            return prevYear;
+          }
+          
+          // 否则，选择天数最多的年份
+          let maxDays = 0;
+          let weekYear = originalYear;
+          for (const year in yearCounts) {
+            const days = yearCounts[year];
+            if (days > maxDays || (days === maxDays && parseInt(year) > weekYear)) {
+              maxDays = days;
+              weekYear = parseInt(year);
+            }
+          }
+          return weekYear;
+        }
+
+        // 处理12月第1周的特殊情况
+        function handleDecemberFirstWeek(date, week, month, firstDayJS) {
+          if (week === 1 && month === 11) {
+            // 12月的第1周，属于下一年的第一周
+            date.setHours(0, 0, 0, 0);
+            const dayOffset = (date.getDay() - firstDayJS + 7) % 7;
+            date.setDate(date.getDate() - dayOffset);
+          }
+        }
+
+        // 格式化日期中的周数
+        function formatWeekInDate(dateStr, week, originalYear, weekYear) {
+          let date = dateStr;
+          if (weekYear !== originalYear) {
+            date = date.replace(new RegExp(originalYear, 'ig'), weekYear);
+          }
+          return /WW/.test(date)
+            ? date.replace(/WW/, week < 10 ? '0' + week : week)
+            : date.replace(/W/, week);
+        }
+
+        // 执行周数计算流程
+        const { firstDayOfWeekDate, firstDayJS } = getFirstDayOfWeekDate(value, firstDayOfWeek);
+        const week = calculateWeekNumber(firstDayOfWeekDate, firstDayOfWeek);
+        const weekYear = calculateWeekYear(firstDayOfWeekDate, y);
+        handleDecemberFirstWeek(trueDate, week, month, firstDayJS);
+        
+        const formattedDate = formatDate(trueDate, format);
+        return formatWeekInDate(formattedDate, week, y, weekYear);
       }
 
       if(!Array.isArray(value)){
@@ -208,14 +255,14 @@ const parseAsFormatAndType = (value, customFormat, type) => {
   return parser(value, format);
 };
 
-const formatAsFormatAndType = (value, customFormat, type = 'weekrange') => {
+const formatAsFormatAndType = (value, customFormat, type = 'weekrange', firstDayOfWeek = 7) => {
   if (!value) return null;
   const formatter = (
     TYPE_VALUE_RESOLVER_MAP[type] ||
     TYPE_VALUE_RESOLVER_MAP['default']
   ).formatter;
   const format = customFormat || DEFAULT_FORMATS[type];
-  return formatter(value, format);
+  return formatter(value, format, firstDayOfWeek);
 };
 
 /*
@@ -418,7 +465,9 @@ export default {
     },
 
     displayValue() {
-      const formattedValue = formatAsFormatAndType(this.parsedValue, this.format);
+      // 从 pickerOptions 获取 firstDayOfWeek，默认为 7（周日）
+      const firstDayOfWeek = (this.pickerOptions && this.pickerOptions.firstDayOfWeek) || 7;
+      const formattedValue = formatAsFormatAndType(this.parsedValue, this.format, 'weekrange', firstDayOfWeek);
 
       if (Array.isArray(this.userInput)) {
         return [

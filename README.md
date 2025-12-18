@@ -5,7 +5,7 @@ vue2 element-ui week range component
 
 ### 示例
 
-[在线预览](https://codepen.io/)
+[在线预览](https://codepen.io/Mr-Zhang-the-selector/pen/RNazBYR)
 
 
 ### 注意
