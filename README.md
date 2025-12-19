@@ -18,7 +18,7 @@ npm install week-range-picker --save
 yarn add week-range-picker --save
 ```
 
-### 局部注册（vue2）
+#### 局部注册（vue2）
 
 ```javascript
 <template>
@@ -41,7 +41,7 @@ export default {
 </script>
 ```
 
-##### 浏览器使用（Vue 2）
+#### 浏览器使用（Vue 2）
 
 ```html
 <!DOCTYPE html>
@@ -73,6 +73,30 @@ export default {
 </body>
 </html>
 ```
+
+#### FQA
+webpack4.x旧项目中使用，es模块解析出错，需要额外配置webpack rules
+```
+module: {
+ rules: [
+    ...
+    {
+      test: /\.js$/,
+      loader: 'babel-loader',
+      include: resolve('node_modules/week-range-picker'),
+      options: {
+        presets: ['@babel/preset-env'],
+        plugins: [
+          '@babel/plugin-proposal-optional-chaining',
+          '@babel/plugin-proposal-nullish-coalescing-operator'
+        ]
+      }
+    }
+  ]
+}
+```
+
+
 
 
 ### 文档
