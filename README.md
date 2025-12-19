@@ -26,7 +26,7 @@ yarn add week-range-picker --save
 </template>
 
 <script>
-import { WeekRangePicker } from 'week-range-picker'
+import WeekRangePicker from 'week-range-picker'
 
 export default {
   data() {
