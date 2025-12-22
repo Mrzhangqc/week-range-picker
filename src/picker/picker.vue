@@ -805,7 +805,7 @@ export default {
     },
 
     emitInput(val) {
-      this.dateList = val;
+      this.dateList = val || [];
       const formatted = this.formatToValue(val);
       if (!valueEquals(this.value, formatted)) {
         this.$emit('input', formatted);

@@ -15,7 +15,7 @@
 <script>
 
 // 开发模式从源码导入，生产模式从构建产物导入
-import { WeekRangePicker } from '../../src/index.js'
+import WeekRangePicker from '../../src/index.js'
 
 export default {
   data() {
