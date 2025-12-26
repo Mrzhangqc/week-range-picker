@@ -58,7 +58,7 @@ export default {
   <!-- 先引入 Vue 2 -->
   <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
   <!-- 再引入组件 -->
-  <script src="https://unpkg.com/week-range-picker@1.0.5/dist/week-range-picker.umd.js"></script>
+  <script src="https://unpkg.com/week-range-picker@1.0.8/dist/week-range-picker.umd.js"></script>
   
   <script>
     new Vue({
