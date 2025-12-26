@@ -1,7 +1,7 @@
 {
   "name": "week-range-picker",
   "private": false,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "This is a week range selector based on element-ui 2.x.",
   "exports": {
     ".": {
